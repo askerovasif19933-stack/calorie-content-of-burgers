@@ -3,7 +3,7 @@
 
 
 
-![Превью приложения](images/burger.png)
+images/burger.png
 
 
 
