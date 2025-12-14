@@ -1,0 +1,20 @@
+version: "3.8"   # Версия синтаксиса Docker Compose
+
+services:        # Список сервисов (контейнеров)
+  backend:       # Имя сервиса (логическое)
+    container_name: doc_process_backend
+    # Явное имя контейнера (удобно для логов и отладки)
+
+    build: .
+    # Docker будет собирать образ из Dockerfile в текущей директории
+
+    image: doc_process_backend
+    # Имя Docker-образа
+
+    env_file: .env
+    # Подключаем переменные окружения из файла .env
+
+    ports:
+      - "8000:8000"
+      # Пробрасываем порт:
+      # localhost:8000 → контейнер:8000

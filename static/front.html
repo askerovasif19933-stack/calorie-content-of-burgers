@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор калорийности бургеров</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #f1f1f1;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            color: #FFD166;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(255, 209, 102, 0.3);
+        }
+
+        .subtitle {
+            color: #a0a0c0;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .search-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 18px 25px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(255, 209, 102, 0.3);
+        }
+
+        #searchInput::placeholder {
+            color: #aaa;
+        }
+
+        #searchButton {
+            padding: 18px 35px;
+            background: linear-gradient(to right, #FFD166, #FFB347);
+            border: none;
+            border-radius: 50px;
+            color: #1a1a2e;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #searchButton:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 209, 102, 0.4);
+        }
+
+        #searchButton:active {
+            transform: translateY(-1px);
+        }
+
+        .burger-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .burger-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .burger-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 209, 102, 0.3);
+        }
+
+        .burger-image-container {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .burger-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #fff;
+            transition: transform 0.5s ease;
+        }
+
+        .burger-card:hover .burger-image {
+            transform: scale(1.05);
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .burger-content {
+            padding: 25px;
+        }
+
+        .burger-name {
+            font-size: 1.8rem;
+            color: #FFD166;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .burger-weight {
+            display: inline-block;
+            background: rgba(255, 209, 102, 0.1);
+            color: #FFD166;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .nutrition-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .nutrition-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4dccbd;
+            margin-bottom: 5px;
+        }
+
+        .nutrition-label {
+            font-size: 0.9rem;
+            color: #a0a0c0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calories-highlight {
+            grid-column: span 2;
+            background: rgba(77, 204, 189, 0.1);
+            border: 1px solid rgba(77, 204, 189, 0.3);
+        }
+
+        .calories-highlight .nutrition-value {
+            color: #4dccbd;
+            font-size: 2.2rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0a0c0;
+            font-size: 1.2rem;
+            grid-column: 1 / -1;
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            grid-column: 1 / -1;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #FFD166;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .all-burgers-btn {
+            display: block;
+            margin: 0 auto 40px;
+            padding: 15px 40px;
+            background: transparent;
+            border: 2px solid #FFD166;
+            color: #FFD166;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .all-burgers-btn:hover {
+            background: rgba(255, 209, 102, 0.1);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #a0a0c0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+        }
+
+        .api-info {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                flex-direction: column;
+            }
+            
+            #searchButton {
+                justify-content: center;
+            }
+            
+            .burger-list {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-hamburger"></i>Калорийность бургеров из "Вкусно и Точка"</h1>
+            <p class="subtitle">Узнайте пищевую ценность и калорийность ваших любимых бургеров. Просто введите название бургера в поиск или посмотрите всю доступную информацию.</p>
+        </header>
+
+        <section class="search-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Введите название бургера (например, Чизбургер, Гамбургер...)">
+                <button id="searchButton">
+                    <i class="fas fa-search"></i> Найти бургер
+                </button>
+            </div>
+        </section>
+
+        <button id="showAllButton" class="all-burgers-btn">
+            <i class="fas fa-list"></i> Показать все бургеры
+        </button>
+
+        <div class="burger-list" id="burgerList">
+            <!-- Результаты поиска будут отображаться здесь -->
+            <div class="no-results" id="noResults">
+                <i class="fas fa-search"></i>
+                <p>Введите название бургера для поиска или нажмите "Показать все бургеры"</p>
+            </div>
+        </div>
+
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+            <p>Загружаем информацию о бургерах...</p>
+        </div>
+
+        <footer>
+            <p>API для получения информации о калорийности бургеров</p>
+            <p class="api-info">Бэкенд: FastAPI + SQLAlchemy | Фронтенд: HTML/CSS/JavaScript</p>
+        </footer>
+    </div>
+
+    <script>
+        // Базовый URL вашего бэкенда
+        const API_BASE_URL = 'http://localhost:8000'; // Измените если бэкенд работает на другом порту
+        
+        // Элементы DOM
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const showAllButton = document.getElementById('showAllButton');
+        const burgerList = document.getElementById('burgerList');
+        const loader = document.getElementById('loader');
+        const noResults = document.getElementById('noResults');
+
+        // Функция для отображения загрузки
+        function showLoader() {
+            loader.style.display = 'block';
+            burgerList.innerHTML = '';
+            noResults.style.display = 'none';
+        }
+
+        // Функция для скрытия загрузки
+        function hideLoader() {
+            loader.style.display = 'none';
+        }
+
+        // Функция для создания HTML изображения бургера
+        function createBurgerImage(imageUrl, burgerName) {
+            if (imageUrl && imageUrl.trim() !== '' && imageUrl !== 'null') {
+                // Если есть ссылка из базы, используем ее
+                return `<img src="${imageUrl}" alt="${burgerName}" class="burger-image">`;
+            } else {
+                // Если ссылки нет, показываем заглушку
+                return `
+                    <div class="image-placeholder">
+                        <i class="fas fa-hamburger fa-3x"></i>
+                        <span>Нет изображения</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Функция для отображения бургеров
+        function displayBurgers(burgers) {
+            hideLoader();
+            
+            if (!burgers || (Array.isArray(burgers) && burgers.length === 0)) {
+                burgerList.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-times-circle"></i>
+                        <p>Бургеры не найдены. Попробуйте другой запрос.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            burgerList.innerHTML = '';
+            
+            // Преобразуем в массив, если пришел один объект (при поиске)
+            if (!Array.isArray(burgers)) {
+                burgers = [burgers];
+            }
+            
+            burgers.forEach((burger, index) => {
+                // Получаем ссылку на фото из поля "image"
+                const imageUrl = burger.image || '';
+                
+                const burgerCard = document.createElement('div');
+                burgerCard.className = 'burger-card';
+                burgerCard.style.animationDelay = `${index * 0.1}s`;
+                
+                burgerCard.innerHTML = `
+                    <div class="burger-image-container">
+                        ${createBurgerImage(imageUrl, burger.name)}
+                    </div>
+                    <div class="burger-content">
+                        <h2 class="burger-name">${burger.name}</h2>
+                        <span class="burger-weight">${burger.weight_g} г</span>
+                        
+                        <div class="nutrition-grid">
+                            <div class="nutrition-item calories-highlight">
+                                <div class="nutrition-value">${burger.calories_kkl}</div>
+                                <div class="nutrition-label">Ккал</div>
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${burger.nutritional_value_kj}</div>
+                                <div class="nutrition-label">кДж</div>
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${burger.fats_g}</div>
+                                <div class="nutrition-label">Жиры (г)</div>
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${burger.carbohydrates_g}</div>
+                                <div class="nutrition-label">Углеводы (г)</div>
+                            </div>
+                            
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${burger.protein_g}</div>
+                                <div class="nutrition-label">Белки (г)</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                burgerList.appendChild(burgerCard);
+                
+                // Добавляем обработчик ошибок загрузки изображения
+                const img = burgerCard.querySelector('img.burger-image');
+                if (img) {
+                    img.onerror = function() {
+                        this.parentElement.innerHTML = `
+                            <div class="image-placeholder">
+                                <i class="fas fa-hamburger fa-3x"></i>
+                                <span>Ошибка загрузки изображения</span>
+                            </div>
+                        `;
+                    };
+                }
+            });
+        }
+
+        // Функция для получения всех бургеров
+        async function getAllBurgers() {
+            showLoader();
+            try {
+                const response = await fetch(`${API_BASE_URL}/burgers/`);
+                if (!response.ok) {
+                    throw new Error('Ошибка при получении данных');
+                }
+                const burgers = await response.json();
+                displayBurgers(burgers);
+            } catch (error) {
+                console.error('Ошибка:', error);
+                hideLoader();
+                burgerList.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Ошибка при загрузке данных. Проверьте подключение к серверу.</p>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Убедитесь, что бэкенд работает на ${API_BASE_URL}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Функция для поиска бургера по имени
+        async function searchBurgerByName(name) {
+            if (!name.trim()) {
+                burgerList.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Введите название бургера для поиска</p>
+                    </div>
+                `;
+                return;
+            }
+
+            showLoader();
+            try {
+                const response = await fetch(`${API_BASE_URL}/burgers/search?name=${encodeURIComponent(name)}`);
+                if (!response.ok) {
+                    throw new Error('Ошибка при поиске');
+                }
+                
+                const result = await response.json();
+                
+                if (result) {
+                    displayBurgers(result);
+                } else {
+                    displayBurgers([]);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                hideLoader();
+                burgerList.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Ошибка при поиске. Попробуйте еще раз.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Обработчики событий
+        searchButton.addEventListener('click', () => {
+            const searchTerm = searchInput.value.trim();
+            searchBurgerByName(searchTerm);
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const searchTerm = searchInput.value.trim();
+                searchBurgerByName(searchTerm);
+            }
+        });
+
+        showAllButton.addEventListener('click', getAllBurgers);
+
+        // При загрузке страницы показываем подсказку
+        window.addEventListener('DOMContentLoaded', () => {
+            // Можно автоматически загрузить все бургеры при открытии
+            // getAllBurgers();
+            
+            // Или оставить инструкцию для пользователя
+            noResults.style.display = 'block';
+            
+            // Проверяем подключение к бэкенду
+            checkBackendConnection();
+        });
+
+        // Проверка подключения к бэкенду
+        async function checkBackendConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/`);
+                if (response.ok) {
+                    console.log('✓ Бэкенд подключен успешно');
+                }
+            } catch (error) {
+                console.warn('✗ Бэкенд недоступен. Проверьте, что сервер запущен на', API_BASE_URL);
+                
+                // Показываем предупреждение пользователю
+                const warning = document.createElement('div');
+                warning.style.cssText = `
+                    background: rgba(255, 87, 87, 0.1);
+                    border: 1px solid rgba(255, 87, 87, 0.3);
+                    color: #ff5757;
+                    padding: 15px;
+                    border-radius: 10px;
+                    margin: 20px auto;
+                    max-width: 600px;
+                    text-align: center;
+                `;
+                warning.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Внимание:</strong> Бэкенд сервер не доступен по адресу ${API_BASE_URL}<br>
+                    Убедитесь, что ваш FastAPI сервер запущен.
+                `;
+                
+                document.querySelector('.search-section').after(warning);
+            }
+        }
+    </script>
+</body>
+</html>
