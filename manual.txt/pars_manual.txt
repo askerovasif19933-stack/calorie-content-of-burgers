@@ -1,0 +1,73 @@
+импорт библиотек
+
+import requests
+
+from bs4 import BeautifulSoup
+import json
+
+
+
+в начале нужно создать ссылку на сайт
+
+url = 'https://vkusnotochkamenu.ru/burgers/'
+
+
+это нужно для requests
+
+headers = {
+    'accept': '*/*',
+    'user-agent':'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36'
+}
+
+
+парсим  страницу
+по сути забираем весь html код
+
+req = requests.get(url, headers=headers)
+src = req.text
+
+сохроняем что бы не долбить сайт запросами
+with open('index.html', 'w', encoding='utf-8') as file:
+    file.write(src)
+
+
+открываем на чтение , рабоете с сохраненой страницей
+# with open('page_3.html', 'r') as file:
+#     src = file.read()
+
+создаем парсер , экхемпляр обьекта bs4
+
+soup = BeautifulSoup(src, 'lxml')
+
+
+можно забрать данные по классу или тегу можно збрать толькол один или все
+
+промер по классу
+                           find - один
+# all_product_hrefs = soup.find_all(class_='text-decoration-none')
+
+по тегу
+# all_product_hrefs = soup.find_all('li')
+
+можно комбини ровать для юолее точного нахождения информации
+page = soup.find(class_="pagination").find_all('a')
+
+# for i in all_product_hrefs:
+#     item_text = i.text.strip('\n') - забираем текст
+#     item_href = i.get('href') - забираем ссылку
+#     all_categories_dict[item_text] = item_href
+
+данные с сылками на новую страницу лучше сохронять в json файл
+
+
+# with open('all_categories_dict_1.json', 'w', encoding='utf-8') as file:
+#     json.dump(all_categories_dict, file, indent=4, ensure_ascii=False)
+
+# with open('all_categories_dict_1.json', encoding='utf-8') as file:
+#     all_categories = json.load(file)
+
+после можно проходиться по ссылкам заходить так же и собирать даные
+
+req = requests.get(url, headers=headers)
+src = req.text
+

@@ -11,12 +11,14 @@ with open('../pars/vkusno_tochka_burger.json', 'r', encoding='utf-8') as f:
     src = json.load(f)
 
 def crate_table():
+    """Создание таблицы Product"""
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
 
 
 def insert():
+    """Вставка данных в таблицу Product"""
     with get_session() as session:
 
         for k,v in src.items():

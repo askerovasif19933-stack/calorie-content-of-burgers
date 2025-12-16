@@ -19,6 +19,7 @@ headers = {
 
 
 def parse_int(headers):
+    """Парсер сайта vkusnoitochka.ru для получения данных о бургерах и их калорийности."""
 
     with open('page.json', 'r', encoding='utf-8') as file:
         src = json.load(file)

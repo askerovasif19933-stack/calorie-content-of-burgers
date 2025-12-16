@@ -6,14 +6,13 @@ from pydantic import BaseModel
 from typing import List, Optional
 from database import get_session
 from models import Product
-
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title='информация о калорийности бургеров', description='API для получения информации о калорийности бургеров')
 
 
-from fastapi.staticfiles import StaticFiles
 
-from fastapi.staticfiles import StaticFiles
+# Подключение статических файлов
 
 app.mount("/static", StaticFiles(directory="../static"), name="static")
 
@@ -29,6 +28,7 @@ app.add_middleware(
 
 #Pydantic — служит для валидации входных/выходных данных.
 class Burger(BaseModel):
+    """Модель данных для бургера."""
     image: Optional[str]
     name: str
     weight_g: int
@@ -39,6 +39,7 @@ class Burger(BaseModel):
     protein_g: int
     
     class Config:
+        """Настройки Pydantic модели."""
         orm_mode = True
 
 
@@ -48,7 +49,8 @@ class Burger(BaseModel):
 
 @app.get("/")
 def root():
-    # Возвращаем HTML-файл как главную страницу
+    """Главная страница API.Возвращаем HTML-файл как главную страницу"""
+    
     return {"message": "Перейдите на /docs или /static/front.html"}
 
 
