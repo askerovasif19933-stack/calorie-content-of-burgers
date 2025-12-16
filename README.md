@@ -1,12 +1,6 @@
 # 🍔 **API и веб-интерфейс для информации о калорийности бургеров**
 
-
 <img width="1343" height="1189" alt="2025-12-14_11-36-16" src="https://github.com/user-attachments/assets/465c49e2-6ecb-43ee-bd38-eff09882c47f" />
-
-
-
-<img width="1343" height="1189" alt="2025-12-14_11-36-16" src="https://github.com/user-attachments/assets/465c49e2-6ecb-43ee-bd38-eff09882c47f" />
-
 
 ## 🌐 **Обзор проекта**
 
