@@ -6,9 +6,10 @@ from logger import get_logger
 
 logger = get_logger(__name__)
 
-
-with open('../pars/vkusno_tochka_burger.json', 'r', encoding='utf-8') as f:
-    src = json.load(f)
+def json_pars():
+    with open('../pars/vkusno_tochka_burger.json', 'r', encoding='utf-8') as f:
+        src = json.load(f)
+        return src
 
 def crate_table():
     """Создание таблицы Product"""
@@ -17,7 +18,7 @@ def crate_table():
 
 
 
-def insert():
+def insert(src):
     """Вставка данных в таблицу Product"""
     with get_session() as session:
 
@@ -37,10 +38,13 @@ def insert():
         session.commit()
     logger.info(f'{len(src)} данных вставлено')
 
+def main():
+    try:
+        crate_table()
 
-try:
-    crate_table()
-    insert()
+        src=json_pars()
 
-except Exception as e:
-    logger.error(e)
+        insert(src)
+
+    except Exception as e:
+        logger.error(e)

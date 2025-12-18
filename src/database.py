@@ -1,11 +1,10 @@
-from  sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from sqlalchemy import create_engine
-from config import host, password, port, user, db_name, url_ini
+from src.config import DATABASE_URL
 
 
 # движок для подключения
-engine = create_engine(f"postgresql+psycopg2://{user}:{password}@{host}/{db_name}")
-
+engine = create_engine(DATABASE_URL)
 
 
 # базовый класс от которого наследуемся

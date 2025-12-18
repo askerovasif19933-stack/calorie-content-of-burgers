@@ -1,6 +1,6 @@
 uv.lock
 .venv
-.env
+
 *.log
 
 .idea

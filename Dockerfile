@@ -23,14 +23,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем исходный код FastAPI-приложения
-COPY ./src /app/src
-
-# Копируем папку с парсером и готовым JSON
-# Парсер не запускается, используется только JSON
-COPY ./pars /app/pars
-
-# Копируем статические файлы (HTML)
-COPY ./static /app/static
+COPY . .
 
 # Команда запуска контейнера
 # Запускаем FastAPI через uvicorn
